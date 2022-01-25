@@ -1,0 +1,21 @@
+{
+  "name": "api-gl",
+  "version": "1.0.0",
+  "description": "API Rest usando como banco de dados CouchDB e Front-End React",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "author": "Brad Traversy",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nano": "^9.0.5",
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}

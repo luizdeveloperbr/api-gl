@@ -1,9 +1,13 @@
 //importação e configuração do banco de dados
-const md5 = require('object-hash')
-const nanodb = require('nano')('http://localhost:5984');
+const dotenv = require('dotenv');dotenv.config()
+
+const nanodb = require('nano')(`${process.env.DATABASE_URL}:${process.env.DATABASE_PORT}`);
 const db = nanodb.use('equipamentos');
 
-const express = require('express')
+// Immportação de model
+
+const express = require('express');
+// const Equipamento = require('../model/equip');
 const router = express.Router()
 
 //visualização 
@@ -17,9 +21,8 @@ const router = express.Router()
 
 //criação
 router.post('/add',(req,res) => { 
- // let _id, desc = req.query
-
-    db.insert(req.query, (error,body,headers) => {
+//  const data = new Equipamento(req.query.chapa,req.query.descricao,req.query.setor,req.query.valor)
+    db.insert(req.query, req.query.id, (error) => {
       if(error){return res.send(error.message)}
 
       res.status(201).send('CREATED')
@@ -29,21 +32,13 @@ router.post('/add',(req,res) => {
 
 //edição
 router.put('/:id/edit', (req,res) => {
-    //função nova ID de revisão
-   function rev(d){
-    let n = d._rev[0]
-   let hash = md5(req.query, 'hex')
-   let resul = String(n+1) + "-" + hash
-   console.log(resul)
-   return resul
-  }
-  var doc
   db.get(req.params.id, (error,body,headers) => {
     if(error){return res.send(error.message)}
-    doc = body
+    db.insert({ _rev: body._rev, _id: req.params.id,...req.query}, (error,body,headers) => {
+      if(error){return res.send(error.message)}
+      res.status(202).send('UPDATED')
+    })
   })
-  db.insert({ _rev: rev(doc), _id: req.params.id,...req.query})
-  res.send('updated')
 })
 
 //delete
@@ -52,7 +47,7 @@ router.delete('/:id/delete', (req,res) => {
          if(error){return res.send(error.message)}
            db.destroy(req.params.id, body._rev)
        })
-  res.send('DELETE')
+  res.status(200).send('DELETE')
 })
 
 module.exports = router

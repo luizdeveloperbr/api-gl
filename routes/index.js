@@ -1,9 +1,18 @@
-//importação e configuração do banco de dados
 const dotenv = require('dotenv');dotenv.config()
+const nano = require('nano')(`http://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URL}:${process.env.DB_PORT}`);
+const db = nano.use(process.env.DB_NAME)
+const open_db = () => {
 
-const nanodb = require('nano')(`${process.env.DATABASE_URL}:${process.env.DATABASE_PORT}`);
-const db = nanodb.use('equipamentos');
+  const db_name = nano.db.list()
+  if(db_name.includes(process.env.DB_NAME)){
+   return db = nano.use(process.env.DB_NAME)
+   //return  console.log('db existe')
+    }
+     nano.db.create(process.env.DB_NAME);
+    return db = nano.use(process.env.DB_NAME)
+   //return  console.log('db nao existe')
 
+}
 // Immportação de model
 
 const express = require('express');

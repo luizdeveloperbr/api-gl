@@ -1,7 +1,7 @@
 {
   "name": "api-gl",
   "version": "1.0.0",
-  "description": "API Rest usando como banco de dados CouchDB e Front-End React",
+  "description": "API Rest usando como banco de dados CouchDB",
   "main": "index.js",
   "scripts": {
     "start": "node index",
@@ -13,8 +13,7 @@
     "cors": "^2.8.5",
     "dotenv": "^14.3.2",
     "express": "^4.17.1",
-    "nano": "^9.0.5",
-    "react": "^17.0.2"
+    "nano": "^9.0.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.14"

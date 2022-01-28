@@ -5,6 +5,7 @@
     // Criar novo equipamento
     POST /api/add
 os parâmetros passados em Query na url são transformados em um Objeto e inseridos na tabela
+(obs: obrigatorio o uso do parâmetro **id**)
 
 ---
 

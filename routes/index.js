@@ -7,12 +7,13 @@ const db = nano.use(process.env.DB_NAME)
 const express = require('express');
 const router = express.Router()
 
+const Equipamento = require('../model/equip');
 //criação
 router.post('/add',(req,res) => { 
-  db.insert(req.query, req.query.id, (error) => {
+  const data = new Equipamento(req.query)
+  db.insert(data, data._id, (error) => {
     if(error){return res.send(error.message)}
-    res.status(201).send('CREATED')
-
+    res.status(201).send(`${data._id} criado`)
   })
 })
 
@@ -28,9 +29,10 @@ router.post('/add',(req,res) => {
 router.put('/:id/edit', (req,res) => {
   db.get(req.params.id, (error,body,headers) => {
     if(error){return res.send(error.message)}
-    db.insert({ _rev: body._rev, _id: req.params.id,...req.query}, (error,body,headers) => {
+    const data = new Equipamento(req.query)
+    db.insert({ _rev: body._rev, _id: req.params.id,...data.edit()}, (error,body,headers) => {
       if(error){return res.send(error.message)}
-      res.status(202).send('UPDATED')
+      res.status(202).send(`updated ${body.rev}`)
     })
   })
 })

@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  db:
+    image: couchdb
+    build: 
+      context: db
+      dockerfile: ./db/Dockerfile
+    restart: always
+    ports:
+      - 5984:5984
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    volumes:
+        - ./dbdata:/opt/couchdb/data
+  apigl:
+    image: apigl
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:5000
+    environment:
+      - DB_USER=admin
+      - DB_PASS=password
+      - DB_NAME=equipamentos
+      - DB_URL=localhost
+      - DB_PORT=5984
